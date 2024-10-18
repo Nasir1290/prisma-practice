@@ -1,7 +1,8 @@
 import cookieParser from "cookie-parser";
 import "dotenv/config";
 import express, { urlencoded } from "express";
-import router from "./routes/route.js";
+import userRouter from "./routes/userRoute.js";
+import { postRouter } from "./routes/postRouter.js";
 
 const app = express();
 
@@ -11,10 +12,12 @@ app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // routes
-app.use(router);
 app.get("/", (req, res) => {
-  res.send("welcome !");
+  res.send("welcome to the server...");
 });
+app.use("/user",userRouter);
+app.use("/post",postRouter);
+
 
 app.use("*",(req,res)=> {
   res.status(404).json({message: "Page not found"})

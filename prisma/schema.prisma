@@ -26,7 +26,6 @@ model Post {
   author   User   @relation(fields: [authorId], references: [id])
   authorId String @db.ObjectId
   title    String
-  slug     String
   body     String
   userId   String @db.ObjectId
 }
