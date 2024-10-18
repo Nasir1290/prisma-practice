@@ -1,5 +1,52 @@
 import prisma from "../prisma/index.js";
 import { createCookieToken } from "../utils/cookieToken.js";
+import excludeFields from "../utils/excludeFields.js";
+
+const getSingleUser = async (req, res) => {
+  try {
+    // get user id
+    const userId = req.params.id;
+    if (!userId) {
+      throw new Error("Invalid user id");
+    }
+    // find the user
+    const finedUser = await prisma.user.findFirst({ where: { id: userId } });
+    // select which field i don't want
+    const selectedFields = excludeFields(finedUser, ["password"]);
+
+    if (!finedUser) {
+      throw new Error("User not found");
+    }
+    // get user data
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        ...selectedFields,
+        Post: {
+          select: {
+            title: true,
+            body: true,
+          },
+        },
+      },
+    });
+    // send response
+    res.status(200).json({
+      success: true,
+      data: user,
+      message: "User fetched successfully",
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      data: {},
+      message: error.message || "something went wrong",
+    });
+    // console.log(error);
+  }
+};
 
 const signUpUser = async (req, res) => {
   try {
@@ -82,6 +129,4 @@ const logOutUser = async (req, res) => {
   }
 };
 
-export { signUpUser, logInUser, logOutUser };
-
-
+export { signUpUser, logInUser, logOutUser, getSingleUser };

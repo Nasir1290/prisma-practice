@@ -20,7 +20,7 @@ app.use("/post",postRouter);
 
 
 app.use("*",(req,res)=> {
-  res.status(404).json({message: "Page not found"})
+  res.status(404).json({message: "Route Not Exist or Invalid!"});
 })
 
 export default app;

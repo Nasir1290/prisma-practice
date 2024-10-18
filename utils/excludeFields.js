@@ -7,6 +7,7 @@ const excludeFields = (model, deselectFields=[]) => {
       selectedFields[field] = true;
     }
   });
+  console.log({selectedFields})
   return selectedFields;
 };
 
