@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import prisma from "../prisma/index.js";
-import excludeFields from "../utils/excludeFields.js";
 
 const authentication = async (req, res, next) => {
   try {
@@ -15,7 +14,7 @@ const authentication = async (req, res, next) => {
       });
     }
 
-    const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     if (!decodedToken.userId) {
       return res.status(401).json({
         statusCode: 401,
@@ -31,7 +30,6 @@ const authentication = async (req, res, next) => {
       // select: excludeFields(prisma.user, ["password"]),
     });
 
-
     if (!user) {
       throw new Error("AccessToken expired or invalid");
     }
@@ -45,7 +43,7 @@ const authentication = async (req, res, next) => {
       message: error.message || "Something went wrong",
       data: {},
     });
-    console.log({error})
+    console.log({ error });
   }
 };
 

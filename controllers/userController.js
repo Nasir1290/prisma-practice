@@ -129,4 +129,6 @@ const logOutUser = async (req, res) => {
   }
 };
 
+
+
 export { signUpUser, logInUser, logOutUser, getSingleUser };
